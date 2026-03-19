@@ -1,0 +1,255 @@
+{
+  "run_timestamp": "2026-03-19T13:28:39.224325Z",
+  "project": "citycycle-dsai4",
+  "overall_status": "PASS",
+  "checkpoints": [
+    {
+      "checkpoint": "post_ingest",
+      "checks": [
+        {
+          "check": "rental_id \u2014 not null",
+          "status": "PASS",
+          "value": "0",
+          "threshold": "None",
+          "severity": "error"
+        },
+        {
+          "check": "rental_id \u2014 unique",
+          "status": "PASS",
+          "value": "0",
+          "threshold": "None",
+          "severity": "error"
+        },
+        {
+          "check": "start_date \u2014 not null",
+          "status": "PASS",
+          "value": "0",
+          "threshold": "None",
+          "severity": "error"
+        },
+        {
+          "check": "start_date \u2014 after 2010-01-01",
+          "status": "PASS",
+          "value": "0",
+          "threshold": "None",
+          "severity": "error"
+        },
+        {
+          "check": "duration \u2014 not null",
+          "status": "PASS",
+          "value": "0",
+          "threshold": "None",
+          "severity": "error"
+        },
+        {
+          "check": "duration \u2014 between 60 and 86400 seconds (source data)",
+          "status": "WARN",
+          "value": "27050",
+          "threshold": "Known: ~27K docking errors in public dataset",
+          "severity": "warning"
+        },
+        {
+          "check": "start_station_id \u2014 not null",
+          "status": "PASS",
+          "value": "0",
+          "threshold": "None",
+          "severity": "error"
+        },
+        {
+          "check": "end_station_id \u2014 not null (source data)",
+          "status": "WARN",
+          "value": "312144",
+          "threshold": "Known: ~312K lost/unreturned bikes in public dataset",
+          "severity": "warning"
+        },
+        {
+          "check": "end_date \u2014 after start_date (source data)",
+          "status": "WARN",
+          "value": "10008",
+          "threshold": "Known: ~10K timestamp errors in public dataset",
+          "severity": "warning"
+        },
+        {
+          "check": "total row count \u2014 at least 1M rows",
+          "status": "PASS",
+          "value": "32369326",
+          "threshold": "1,000,000",
+          "severity": "error"
+        },
+        {
+          "check": "station id \u2014 not null",
+          "status": "PASS",
+          "value": "0",
+          "threshold": "None",
+          "severity": "error"
+        },
+        {
+          "check": "station id \u2014 unique",
+          "status": "PASS",
+          "value": "0",
+          "threshold": "None",
+          "severity": "error"
+        },
+        {
+          "check": "latitude \u2014 valid London range (51.3\u201351.7)",
+          "status": "PASS",
+          "value": "0",
+          "threshold": "None",
+          "severity": "error"
+        },
+        {
+          "check": "longitude \u2014 valid London range (-0.6\u20130.3)",
+          "status": "PASS",
+          "value": "0",
+          "threshold": "None",
+          "severity": "error"
+        },
+        {
+          "check": "nb_docks \u2014 positive",
+          "status": "PASS",
+          "value": "0",
+          "threshold": "None",
+          "severity": "error"
+        },
+        {
+          "check": "station name \u2014 not null",
+          "status": "PASS",
+          "value": "0",
+          "threshold": "None",
+          "severity": "error"
+        }
+      ]
+    },
+    {
+      "checkpoint": "post_transform",
+      "checks": [
+        {
+          "check": "rental_id \u2014 not null",
+          "status": "PASS",
+          "value": "0",
+          "threshold": "None",
+          "severity": "error"
+        },
+        {
+          "check": "ride_sk \u2014 unique",
+          "status": "PASS",
+          "value": "0",
+          "threshold": "None",
+          "severity": "error"
+        },
+        {
+          "check": "duration_minutes \u2014 between 1 and 1440",
+          "status": "PASS",
+          "value": "0",
+          "threshold": "None",
+          "severity": "error"
+        },
+        {
+          "check": "start_station_id \u2014 not null",
+          "status": "PASS",
+          "value": "0",
+          "threshold": "None",
+          "severity": "error"
+        },
+        {
+          "check": "hire_date \u2014 not null",
+          "status": "PASS",
+          "value": "0",
+          "threshold": "None",
+          "severity": "error"
+        },
+        {
+          "check": "start_hour \u2014 between 0 and 23",
+          "status": "PASS",
+          "value": "0",
+          "threshold": "None",
+          "severity": "error"
+        },
+        {
+          "check": "duration_band \u2014 valid values only",
+          "status": "PASS",
+          "value": "0",
+          "threshold": "None",
+          "severity": "error"
+        },
+        {
+          "check": "null rate on key columns \u2014 under 5%",
+          "status": "PASS",
+          "value": "0.0",
+          "threshold": "5%",
+          "severity": "warning"
+        },
+        {
+          "check": "end_datetime \u2014 after start_datetime",
+          "status": "PASS",
+          "value": "0",
+          "threshold": "None",
+          "severity": "error"
+        },
+        {
+          "check": "imbalance_score \u2014 between 0 and 1",
+          "status": "PASS",
+          "value": "0",
+          "threshold": "None",
+          "severity": "error"
+        },
+        {
+          "check": "total row count \u2014 at least 1M rows",
+          "status": "PASS",
+          "value": "32342086",
+          "threshold": "1,000,000",
+          "severity": "error"
+        },
+        {
+          "check": "station_id \u2014 not null",
+          "status": "PASS",
+          "value": "0",
+          "threshold": "None",
+          "severity": "error"
+        },
+        {
+          "check": "station_id \u2014 unique",
+          "status": "PASS",
+          "value": "0",
+          "threshold": "None",
+          "severity": "error"
+        },
+        {
+          "check": "latitude \u2014 valid London range",
+          "status": "PASS",
+          "value": "0",
+          "threshold": "None",
+          "severity": "error"
+        },
+        {
+          "check": "nb_docks \u2014 positive",
+          "status": "PASS",
+          "value": "0",
+          "threshold": "None",
+          "severity": "error"
+        },
+        {
+          "check": "fact_rides.start_station_id \u2192 dim_stations (FK)",
+          "status": "WARN",
+          "value": "1610",
+          "threshold": "None",
+          "severity": "warning"
+        },
+        {
+          "check": "dim_date \u2014 at least 3650 rows",
+          "status": "PASS",
+          "value": "4017",
+          "threshold": "3,650",
+          "severity": "error"
+        },
+        {
+          "check": "dim_date.date_day \u2014 unique",
+          "status": "PASS",
+          "value": "0",
+          "threshold": "None",
+          "severity": "error"
+        }
+      ]
+    }
+  ]
+}

@@ -77,3 +77,5 @@ npm-debug.log*
 
 # ── Streamlit secrets ─────────────────────────────────────
 .streamlit/secrets.toml
+
+!quality/ge_results.json
