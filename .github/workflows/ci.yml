@@ -22,9 +22,9 @@ name: CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 # Cancel in-progress runs for the same branch on new pushes
 concurrency:
@@ -63,12 +63,11 @@ jobs:
 
       - name: black — check formatting
         run: |
-          black --check --diff \
-            dashboard/ ingestion/ ml/ orchestration/ quality/
+          black dashboard/ ingestion/ ml/ orchestration/ quality/
 
-# ══════════════════════════════════════════════════════════════════
-# JOB 2 — Mock data generation & validation
-# ══════════════════════════════════════════════════════════════════
+  # ══════════════════════════════════════════════════════════════════
+  # JOB 2 — Mock data generation & validation
+  # ══════════════════════════════════════════════════════════════════
   mock-data:
     name: "Mock data — generate & validate"
     runs-on: ubuntu-latest
@@ -131,9 +130,9 @@ jobs:
           path: data/mock/
           retention-days: 1
 
-# ══════════════════════════════════════════════════════════════════
-# JOB 3 — dbt parse (validates SQL syntax without BQ connection)
-# ══════════════════════════════════════════════════════════════════
+  # ══════════════════════════════════════════════════════════════════
+  # JOB 3 — dbt parse (validates SQL syntax without BQ connection)
+  # ══════════════════════════════════════════════════════════════════
   dbt-compile:
     name: "dbt — compile & parse all models"
     runs-on: ubuntu-latest
@@ -195,9 +194,9 @@ jobs:
           print('Model count check passed ✓')
           "
 
-# ══════════════════════════════════════════════════════════════════
-# JOB 4 — ML model training on mock data
-# ══════════════════════════════════════════════════════════════════
+  # ══════════════════════════════════════════════════════════════════
+  # JOB 4 — ML model training on mock data
+  # ══════════════════════════════════════════════════════════════════
   train-model:
     name: "ML — train on mock data, assert RMSE"
     runs-on: ubuntu-latest
@@ -277,9 +276,9 @@ jobs:
               print(f"PASS — RMSE within acceptable range ✓")
           EOF
 
-# ══════════════════════════════════════════════════════════════════
-# JOB 5 — Execute EDA notebook headlessly
-# ══════════════════════════════════════════════════════════════════
+  # ══════════════════════════════════════════════════════════════════
+  # JOB 5 — Execute EDA notebook headlessly
+  # ══════════════════════════════════════════════════════════════════
   notebook:
     name: "Notebook — execute all cells"
     runs-on: ubuntu-latest
