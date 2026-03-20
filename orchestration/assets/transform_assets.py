@@ -8,7 +8,6 @@ In prod mode: runs dbt run + dbt test against live BigQuery.
 """
 
 import subprocess
-import sys
 from pathlib import Path
 
 from dagster import AssetExecutionContext, AssetIn, Output, asset, get_dagster_logger
@@ -20,6 +19,7 @@ DBT_DIR = ROOT / "transform"
 def _run_dbt(args: list, context: AssetExecutionContext) -> subprocess.CompletedProcess:
     log = get_dagster_logger()
     from pathlib import Path as _Path
+
     profiles_dir = str(_Path.home() / ".dbt")
     cmd = ["dbt"] + args + ["--profiles-dir", profiles_dir]
     log.info(f"Running: {' '.join(cmd)}")
@@ -93,12 +93,12 @@ def dbt_test_asset(
     lines = result.stdout.splitlines()
 
     # Count PASS/WARN/ERROR
-    passed = sum(1 for l in lines if "PASS" in l)
-    warned = sum(1 for l in lines if "WARN" in l)
-    errors = sum(1 for l in lines if "ERROR" in l and "Completed" not in l)
+    passed = sum(1 for line in lines if "PASS" in line)
+    warned = sum(1 for line in lines if "WARN" in line)
+    errors = sum(1 for line in lines if "ERROR" in line and "Completed" not in line)
 
     if result.returncode != 0 and errors > 0:
-        failed_tests = [l for l in lines if "FAIL" in l or "ERROR" in l]
+        failed_tests = [line for line in lines if "FAIL" in line or "ERROR" in line]
         raise RuntimeError(
             f"dbt tests failed ({errors} errors):\n" + "\n".join(failed_tests[:20])
         )

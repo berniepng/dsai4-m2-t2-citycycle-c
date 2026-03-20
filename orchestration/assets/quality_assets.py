@@ -7,9 +7,6 @@ Runs run_ge_checks.py against the mock data CSV files directly.
 No BigQuery connection required in mock/dev mode.
 """
 
-import json
-import subprocess
-import sys
 from pathlib import Path
 
 from dagster import AssetExecutionContext, AssetIn, Output, asset, get_dagster_logger

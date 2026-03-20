@@ -26,7 +26,7 @@ ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from dagster import (
+from dagster import (  # noqa: E402
     AssetSelection,
     DefaultScheduleStatus,
     Definitions,
@@ -36,7 +36,11 @@ from dagster import (
     load_assets_from_modules,
 )
 
-from orchestration.assets import ingestion_assets, quality_assets, transform_assets
+from orchestration.assets import (
+    ingestion_assets,
+    quality_assets,
+    transform_assets,
+)  # noqa: E402
 
 # ── Load all assets ───────────────────────────────────────────────
 all_assets = load_assets_from_modules(
