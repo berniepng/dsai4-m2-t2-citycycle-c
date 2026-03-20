@@ -83,95 +83,77 @@ The pipeline follows a **medallion-style** architecture:
 dsai4-m2-t2-citycycle-c/
 ├── .github/
 │   └── workflows/
-│       └── ci.yml                    # GitHub Actions: lint, test, dry-run
+│       └── ci.yml                    # GitHub Actions: lint, mock-data, dbt-compile, train-model, notebook
 ├── ingestion/
-│   ├── meltano.yml                   # Meltano project config (taps & targets)
-│   ├── load_mock.py                  # Python loader: mock CSV → BigQuery
-│   └── README.md
-├── warehouse/
-│   ├── schema/
-│   │   ├── raw_schema.sql            # Raw table DDL
-│   │   └── star_schema.sql           # Dimension + fact table DDL
-│   └── README.md
+│   ├── meltano.yml                   # Meltano project config (tap-bigquery → target-bigquery)
+│   ├── load_mock.py                  # Python loader: mock CSV → BigQuery (dry-run + live)
+│   ├── load_live_stations.py         # One-time loader: stations from BQ public dataset
+│   └── bq_cost_guard.py              # Query cost guard: dry-run estimates + monthly budget tracking
 ├── transform/
 │   ├── dbt_project.yml               # dbt project config
 │   ├── profiles_template.yml         # profiles.yml template (DO NOT commit real profiles.yml)
 │   ├── models/
 │   │   ├── staging/
-│   │   │   ├── stg_cycle_hire.sql
-│   │   │   ├── stg_cycle_stations.sql
-│   │   │   └── _staging.yml          # schema tests
+│   │   │   ├── stg_cycle_hire.sql    # Clean + type raw ride data
+│   │   │   ├── stg_cycle_stations.sql # Clean stations, add zone + capacity_tier
+│   │   │   └── _staging.yml          # 25 schema tests
 │   │   ├── intermediate/
-│   │   │   ├── int_rides_enriched.sql
-│   │   │   └── int_station_daily_stats.sql
+│   │   │   ├── int_rides_enriched.sql        # Join rides + stations, add flags
+│   │   │   └── int_station_daily_stats.sql   # Daily imbalance per station
 │   │   └── marts/
-│   │       ├── dim_stations.sql
-│   │       ├── dim_date.sql
-│   │       ├── fact_rides.sql
-│   │       └── _marts.yml
+│   │       ├── dim_stations.sql      # Station dimension with rebalancing priority
+│   │       ├── dim_date.sql          # Date spine 2010–2030
+│   │       ├── fact_rides.sql        # 32.3M rows, partitioned by hire_date
+│   │       └── _marts.yml            # 31 schema tests
 │   ├── macros/
 │   │   └── generate_surrogate_key.sql
 │   └── tests/
 │       └── assert_ride_duration_positive.sql
 ├── quality/
-│   ├── great_expectations.yml
+│   ├── checkpoints/
+│   │   └── post_ingest.yml           # GE checkpoint config
 │   ├── expectations/
 │   │   └── suites/
 │   │       ├── raw_cycle_hire.json
 │   │       └── fact_rides.json
-│   ├── checkpoints/
-│   │   ├── post_ingest.yml
-│   │   └── post_transform.yml
-│   └── run_ge_checks.py
+│   ├── run_ge_checks.py              # 34 custom SQL checks: 30 PASS · 4 WARN · 0 FAIL
+│   └── ge_results.json               # Last run results (evidence)
 ├── orchestration/
-│   ├── workspace.yaml                # Dagster workspace
+│   ├── workspace.yaml                # Dagster scaffold (reference only — CI uses GitHub Actions)
 │   ├── assets/
 │   │   ├── ingestion_assets.py
 │   │   ├── transform_assets.py
 │   │   └── quality_assets.py
-│   ├── jobs/
-│   │   └── citycycle_pipeline_job.py
-│   └── sensors/
-│       └── bq_sensor.py
+│   └── jobs/
+│       └── citycycle_pipeline_job.py
 ├── analysis/
-│   ├── notebooks/
-│   │   ├── 01_eda_mock_data.ipynb
-│   │   ├── 02_station_imbalance_analysis.ipynb
-│   │   └── 03_demand_forecasting_model.ipynb
-│   └── scripts/
-│       ├── connect_bq.py             # SQLAlchemy → BigQuery
-│       └── run_analysis.py
+│   └── notebooks/
+│       ├── 01_eda_mock_data.ipynb           # Initial EDA on mock data
+│       └── 02_bq_eda_live_data.ipynb        # Live BQ EDA via SQLAlchemy (32M rows)
 ├── ml/
-│   ├── features/
-│   │   └── feature_engineering.py
 │   └── models/
-│       ├── train_demand_model.py
-│       └── predict_rebalancing.py
+│       └── train_demand_model.py     # 3-model comparison: Linear Reg · Random Forest · XGBoost
 ├── dashboard/
 │   ├── app.py                        # Streamlit entry point
 │   ├── pages/
-│   │   ├── 01_overview.py
-│   │   ├── 02_station_map.py         # Geospatial map (pydeck / folium)
-│   │   ├── 03_rebalancing.py
-│   │   └── 04_forecast.py
+│   │   ├── 01_overview.py            # KPIs + daily trend + hourly demand
+│   │   ├── 02_station_map.py         # pydeck 3D + folium detailed map
+│   │   ├── 03_rebalancing.py         # Intervention list + crew runs estimate
+│   │   └── 04_forecast.py            # 24h XGBoost demand forecast
 │   └── utils/
-│       ├── bq_client.py
-│       └── mock_data_generator.py
+│       ├── bq_client.py              # BQ connection via cost guard
+│       └── mock_data_generator.py    # Synthetic data generator (CI-safe)
 ├── data/
 │   └── mock/
-│       ├── cycle_hire_mock.csv       # ~10,000 synthetic rides
-│       └── cycle_stations_mock.csv  # 795 station records
+│       ├── cycle_hire_mock.csv       # 10K synthetic rides (CI + dev)
+│       └── cycle_stations_mock.csv   # 795 station records
 ├── docs/
-│   ├── diagrams/
-│   │   ├── dataflow_diagram.png      # Architecture diagram (this README)
-│   │   └── star_schema_erd.png
-│   └── reports/
-│       └── technical_report.md
+│   └── diagrams/
+│       └── dataflow_diagram.png      # Architecture diagram
 ├── .env.example                      # Template for env vars (no secrets)
 ├── .gitignore
 ├── requirements.txt
-├── pyproject.toml
-└── README.md                         # This file
+└── README.md
 ```
 
 ---
