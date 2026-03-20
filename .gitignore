@@ -32,6 +32,8 @@ htmlcov/
 
 # ── Jupyter ───────────────────────────────────────────────
 .ipynb_checkpoints/
+# Block executed notebooks (large, regeneratable)
+*_executed.ipynb
 
 # ── dbt ───────────────────────────────────────────────────
 target/
@@ -78,4 +80,17 @@ npm-debug.log*
 # ── Streamlit secrets ─────────────────────────────────────
 .streamlit/secrets.toml
 
+# ── ML model artefacts ────────────────────────────────────
+*.pkl
+*.joblib
+*.h5
+*.pt
+*.pth
+
+# ── GE results (keep for evidence) ───────────────────────
 !quality/ge_results.json
+
+# ── Notebook outputs (charts saved during runs) ───────────
+analysis/notebooks/*.png
+analysis/notebooks/*.html
+!analysis/notebooks/01_eda_mock_data.html
