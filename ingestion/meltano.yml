@@ -31,7 +31,7 @@ environments:
           - name: tap-bigquery
             config:
               # In dev, pull only 30 days of data — protects free tier
-              start_datetime: "2023-01-01T00:00:00Z"
+              start_datetime: "2012-01-01T00:00:00Z"
   - name: prod
     config:
       plugins:
@@ -67,7 +67,7 @@ plugins:
         - name: limit
           kind: integer
           label: Row limit per query (dev safety guard)
-          value: 500000
+          value: 5000000
       config:
         # ── Source tables ─────────────────────────────────────────
         # We use custom_queries to add cost-control WHERE clauses
@@ -85,11 +85,7 @@ plugins:
               - start_date
               - start_station_id
               - start_station_name
-            # COST GUARD: partition filter on start_date
-            # Avoids full-table scan of 83M rows
-            filters: "start_date >= TIMESTAMP(@start_datetime)"
             datetime_key: start_date
-            order_by: start_date ASC
 
           - name: cycle_stations
             table: bigquery-public-data.london_bicycles.cycle_stations
@@ -98,13 +94,16 @@ plugins:
               - installed
               - locked
               - install_date
+              - removal_date
               - name
               - terminal_name
               - latitude
               - longitude
-              - nbdocks
+              - bikes_count
+              - docks_count
+              - nbEmptyDocks
               - temporary
-            # stations is small (795 rows) — full refresh each run is fine
+            datetime_key: install_date
 
   loaders:
     - name: target-bigquery
@@ -133,7 +132,7 @@ plugins:
           kind: boolean
           value: true
       config:
-        project_id: ${GCP_PROJECT_ID}
+        project_id: citycycle-dsai4
         dataset_id: citycycle_raw
         location: EU
         add_metadata_columns: true

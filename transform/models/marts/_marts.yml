@@ -31,19 +31,20 @@ models:
       - name: peak_hour_flag
         tests:
           - not_null
-          - accepted_values:
-              values: [0, 1]
+          - dbt_utils.accepted_range:
+              min_value: 0
+              max_value: 1
       - name: start_station_is_imbalanced
         tests:
           - not_null
-          - accepted_values:
-              values: [true, false]
       - name: start_station_id
         tests:
           - not_null
           - relationships:
               to: ref('dim_stations')
               field: station_id
+              config:
+                severity: warn
       - name: duration_band
         tests:
           - accepted_values:

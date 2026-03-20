@@ -29,10 +29,7 @@ st.set_page_config(
 
 # ── Sidebar ───────────────────────────────────────────────────────
 with st.sidebar:
-    st.image(
-        "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Santander_Cycles_logo.svg/240px-Santander_Cycles_logo.svg.png",
-        width=160,
-    )
+    st.markdown("## 🚲")
     st.markdown("## CityCycle London")
     st.markdown("**Bike Rebalancing Intelligence**")
     st.markdown("---")

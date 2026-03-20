@@ -59,15 +59,15 @@ cleaned as (
         end                               as zone,
 
         -- ── operational fields ────────────────────────────────────
-        cast(nbdocks   as int64)          as nb_docks,
+        cast(docks_count as int64)        as nb_docks,
         cast(installed as bool)           as is_installed,
         cast(locked    as bool)           as is_locked,
         cast(temporary as bool)           as is_temporary,
 
         -- ── capacity tier ─────────────────────────────────────────
         case
-            when cast(nbdocks as int64) <= 15 then 'small'
-            when cast(nbdocks as int64) <= 24 then 'medium'
+            when cast(docks_count as int64) <= 15 then 'small'
+            when cast(docks_count as int64) <= 24 then 'medium'
             else 'large'
         end                               as capacity_tier,
 
@@ -79,7 +79,7 @@ cleaned as (
         id is not null
         and cast(latitude  as float64) between 51.3 and 51.7
         and cast(longitude as float64) between -0.6 and 0.3
-        and cast(nbdocks   as int64)  > 0
+        and cast(docks_count   as int64)  > 0
 
 )
 

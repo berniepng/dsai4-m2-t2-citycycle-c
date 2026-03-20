@@ -23,25 +23,22 @@ with date_spine as (
 -- UK public holidays (key dates — extend as needed)
 uk_bank_holidays as (
 
-    select holiday_date, holiday_name from (
-        values
-            (date '2023-01-02', 'New Year Holiday'),
-            (date '2023-04-07', 'Good Friday'),
-            (date '2023-04-10', 'Easter Monday'),
-            (date '2023-05-01', 'Early May Bank Holiday'),
-            (date '2023-05-29', 'Spring Bank Holiday'),
-            (date '2023-08-28', 'Summer Bank Holiday'),
-            (date '2023-12-25', 'Christmas Day'),
-            (date '2023-12-26', 'Boxing Day'),
-            (date '2024-01-01', 'New Year Day'),
-            (date '2024-03-29', 'Good Friday'),
-            (date '2024-04-01', 'Easter Monday'),
-            (date '2024-05-06', 'Early May Bank Holiday'),
-            (date '2024-05-27', 'Spring Bank Holiday'),
-            (date '2024-08-26', 'Summer Bank Holiday'),
-            (date '2024-12-25', 'Christmas Day'),
-            (date '2024-12-26', 'Boxing Day')
-    ) as t(holiday_date, holiday_name)
+    select date('2023-01-02') as holiday_date, 'New Year Holiday'       as holiday_name union all
+    select date('2023-04-07'),                  'Good Friday'                             union all
+    select date('2023-04-10'),                  'Easter Monday'                           union all
+    select date('2023-05-01'),                  'Early May Bank Holiday'                  union all
+    select date('2023-05-29'),                  'Spring Bank Holiday'                     union all
+    select date('2023-08-28'),                  'Summer Bank Holiday'                     union all
+    select date('2023-12-25'),                  'Christmas Day'                           union all
+    select date('2023-12-26'),                  'Boxing Day'                              union all
+    select date('2024-01-01'),                  'New Year Day'                            union all
+    select date('2024-03-29'),                  'Good Friday'                             union all
+    select date('2024-04-01'),                  'Easter Monday'                           union all
+    select date('2024-05-06'),                  'Early May Bank Holiday'                  union all
+    select date('2024-05-27'),                  'Spring Bank Holiday'                     union all
+    select date('2024-08-26'),                  'Summer Bank Holiday'                     union all
+    select date('2024-12-25'),                  'Christmas Day'                           union all
+    select date('2024-12-26'),                  'Boxing Day'
 
 ),
 

@@ -41,15 +41,14 @@ def get_forecast(station_id: int) -> pd.DataFrame:
         # Build feature rows for next 24 hours
         # (day_of_week, is_weekend, is_holiday, station_id, hour)
         today = pd.Timestamp.now()
-        features = pd.DataFrame(
-            {
-                "hour": hours,
-                "day_of_week": [today.dayofweek] * 24,
-                "is_weekend": [int(today.dayofweek >= 5)] * 24,
-                "is_holiday": [0] * 24,
-                "station_id": [station_id] * 24,
-            }
-        )
+        features = pd.DataFrame({
+            "hour":              hours,
+            "day_of_week":       [today.dayofweek] * 24,
+            "is_weekend":        [int(today.dayofweek >= 5)] * 24,
+            "is_holiday":        [0] * 24,
+            "start_station_id":  [station_id] * 24,
+            "rolling_7d_avg":    [0.0] * 24,
+        })
         predicted = model.predict(features)
         predicted = np.maximum(predicted, 0)
     else:
