@@ -183,6 +183,10 @@ st.markdown("---")
 st.subheader("Interactive 3D View — pydeck")
 
 if HAS_PYDECK and len(filtered) > 0:
+    # Pre-round values so pydeck tooltip can display them without format specs
+    filtered = filtered.copy()
+    filtered["net_flow_display"] = filtered["net_flow"].round(0).astype(int)
+    filtered["imb_score_display"] = filtered["imb_score"].round(3)
     view = pdk.ViewState(
         latitude=filtered["latitude"].mean(),
         longitude=filtered["longitude"].mean(),
@@ -205,8 +209,8 @@ if HAS_PYDECK and len(filtered) > 0:
             <b>{name}</b><br/>
             Priority: <b>{priority}</b><br/>
             Direction: {imb_direction}<br/>
-            Net flow: {net_flow:.0f}<br/>
-            Imbalance score: {imb_score:.2f}
+            Net flow: {net_flow_display}<br/>
+            Imbalance score: {imb_score_display}
         """,
         "style": {
             "backgroundColor": "#1E293B",
@@ -219,7 +223,8 @@ if HAS_PYDECK and len(filtered) > 0:
         layers=[scatter_layer],
         initial_view_state=view,
         tooltip=tooltip,
-        map_style="mapbox://styles/mapbox/light-v11",
+        map_style="https://basemaps.cartocdn.com/gl/positron-gl-style/style.json",
+        map_provider="carto",
     )
     st.pydeck_chart(deck, use_container_width=True)
     st.caption(
