@@ -20,6 +20,7 @@ DATASET = "citycycle_dev_marts"
 st.set_page_config(page_title="Forecast · CityCycle", page_icon="🔮", layout="wide")
 st.title("🔮 24-Hour Demand Forecast")
 st.markdown("Predicted ride demand per station for the next 24 hours.")
+st.caption(f"Forecast date: {pd.Timestamp.now().strftime('%A, %d %B %Y')}")
 
 
 @st.cache_data(ttl=3600)
